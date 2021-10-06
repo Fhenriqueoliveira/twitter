@@ -35,4 +35,12 @@ export class UsersService {
     });
     return user;
   }
+  async deleteOneUser(username: string): Promise<User> {
+    return this.db.user.delete({
+      where: { username },
+    });
+  }
+  async listAll(): Promise<User[]> {
+    return this.db.user.findMany();
+  }
 }

@@ -26,6 +26,12 @@ let UsersController = class UsersController {
     create(data) {
         return this.service.create(data);
     }
+    deleteOneUser(username) {
+        return this.service.deleteOneUser(username);
+    }
+    findMany() {
+        return this.service.listAll();
+    }
 };
 __decorate([
     (0, common_1.Get)(':username'),
@@ -41,6 +47,19 @@ __decorate([
     __metadata("design:paramtypes", [users_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "create", null);
+__decorate([
+    (0, common_1.Delete)('/del/:username'),
+    __param(0, (0, common_1.Param)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteOneUser", null);
+__decorate([
+    (0, common_1.Get)(''),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findMany", null);
 UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])

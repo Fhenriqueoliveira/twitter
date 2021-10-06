@@ -39,6 +39,14 @@ let UsersService = class UsersService {
         });
         return user;
     }
+    async deleteOneUser(username) {
+        return this.db.user.delete({
+            where: { username },
+        });
+    }
+    async listAll() {
+        return this.db.user.findMany();
+    }
 };
 UsersService = __decorate([
     (0, common_1.Injectable)(),
