@@ -6,20 +6,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppModule = void 0;
+exports.SimpleGuard = void 0;
 const common_1 = require("@nestjs/common");
-const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const users_module_1 = require("./users/users.module");
-const auth_module_1 = require("./auth/auth.module");
-let AppModule = class AppModule {
+let SimpleGuard = class SimpleGuard {
+    canActivate(context) {
+        const req = context.switchToHttp().getRequest();
+        const token = req.headers['authorization'];
+        if (!token) {
+            throw new common_1.UnauthorizedException('Token not found');
+        }
+        if (token !== 'MEU_TOKEN') {
+            throw new common_1.UnauthorizedException('Invalid Token');
+        }
+        return true;
+    }
 };
-AppModule = __decorate([
-    (0, common_1.Module)({
-        imports: [users_module_1.UsersModule, auth_module_1.AuthModule],
-        controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
-    })
-], AppModule);
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+SimpleGuard = __decorate([
+    (0, common_1.Injectable)()
+], SimpleGuard);
+exports.SimpleGuard = SimpleGuard;
+//# sourceMappingURL=simple.guard.js.map

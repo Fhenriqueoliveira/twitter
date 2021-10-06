@@ -9,40 +9,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
+exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const prisma_service_1 = require("./prisma.service");
+const jwt_1 = require("@nestjs/jwt");
+const prisma_service_1 = require("../users/prisma.service");
 const bcrypt = require("bcrypt");
-let UsersService = class UsersService {
-    constructor(db) {
+let AuthService = class AuthService {
+    constructor(db, jwt) {
         this.db = db;
+        this.jwt = jwt;
     }
-    async findUnique(username) {
+    async login(data) {
+        const { username, password } = data;
         const user = await this.db.user.findUnique({
             where: { username },
         });
         if (!user) {
             throw new common_1.NotFoundException();
         }
-        return user;
-    }
-    async create(data) {
-        const existing = await this.db.user.findUnique({
-            where: { username: data.username },
-        });
-        if (existing) {
-            throw new common_1.ConflictException('username already exists');
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
+            throw new common_1.UnauthorizedException('invalid_credentials');
         }
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        const user = await this.db.user.create({
-            data: Object.assign(Object.assign({}, data), { password: hashedPassword }),
-        });
-        return user;
+        return {
+            token: this.jwt.sign({ username }),
+            user,
+        };
     }
 };
-UsersService = __decorate([
+AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
-], UsersService);
-exports.UsersService = UsersService;
-//# sourceMappingURL=users.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, jwt_1.JwtService])
+], AuthService);
+exports.AuthService = AuthService;
+//# sourceMappingURL=auth.service.js.map
