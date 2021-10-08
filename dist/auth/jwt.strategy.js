@@ -9,37 +9,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
+exports.JwtStrategy = void 0;
+const passport_jwt_1 = require("passport-jwt");
+const passport_1 = require("@nestjs/passport");
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
+const jwt_constants_1 = require("./jwt.constants");
 const prisma_service_1 = require("../users/prisma.service");
-const bcrypt = require("bcrypt");
-let AuthService = class AuthService {
-    constructor(db, jwt) {
-        this.db = db;
-        this.jwt = jwt;
-    }
-    async login(data) {
-        const { username, password } = data;
-        const user = await this.db.user.findUnique({
-            where: { username },
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor(db) {
+        super({
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: jwt_constants_1.jwtConstants.secret,
         });
-        if (!user) {
-            throw new common_1.UnauthorizedException('invalid_credentials');
-        }
-        const passwordValid = await bcrypt.compare(password, user.password);
-        if (!passwordValid) {
-            throw new common_1.UnauthorizedException('invalid_credentials');
-        }
-        return {
-            token: this.jwt.sign({ username }),
-            user,
-        };
+        this.db = db;
+    }
+    async validate(payload) {
+        const user = await this.db.user.findUnique({
+            where: { username: payload.username },
+        });
+        return user;
     }
 };
-AuthService = __decorate([
+JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, jwt_1.JwtService])
-], AuthService);
-exports.AuthService = AuthService;
-//# sourceMappingURL=auth.service.js.map
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], JwtStrategy);
+exports.JwtStrategy = JwtStrategy;
+//# sourceMappingURL=jwt.strategy.js.map

@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(private db: PrismaService) {}
+
   async findUnique(username: string): Promise<User> {
     const user = await this.db.user.findUnique({
       where: { username },
