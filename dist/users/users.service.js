@@ -17,7 +17,7 @@ let UsersService = class UsersService {
     constructor(db) {
         this.db = db;
     }
-    async findUnique(username) {
+    async listOne(username) {
         const user = await this.db.user.findUnique({
             where: { username },
         });
@@ -46,6 +46,12 @@ let UsersService = class UsersService {
     }
     async listAll() {
         return this.db.user.findMany();
+    }
+    async update(username, data) {
+        return this.db.user.update({
+            data,
+            where: { username: username },
+        });
     }
 };
 UsersService = __decorate([

@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(private db: PrismaService) {}
 
-  async findUnique(username: string): Promise<User> {
+  async listOne(username: string): Promise<User> {
     const user = await this.db.user.findUnique({
       where: { username },
     });
@@ -43,5 +43,11 @@ export class UsersService {
   }
   async listAll(): Promise<User[]> {
     return this.db.user.findMany();
+  }
+  async update(username: string, data: Prisma.UserCreateInput): Promise<User> {
+    return this.db.user.update({
+      data,
+      where: { username: username },
+    });
   }
 }
