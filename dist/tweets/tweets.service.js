@@ -16,6 +16,21 @@ let TweetsService = class TweetsService {
     constructor(tw) {
         this.tw = tw;
     }
+    async create(data) {
+        return this.tw.tweet.create({ data });
+    }
+    async listall() {
+        return this.tw.tweet.findMany();
+    }
+    async deleteTweet(id) {
+        const tweet = await this.tw.tweet.findUnique({
+            where: { id },
+        });
+        if (!tweet) {
+            throw new common_1.NotFoundException();
+        }
+        return this.tw.tweet.delete({ where: { id } });
+    }
 };
 TweetsService = __decorate([
     (0, common_1.Injectable)(),
