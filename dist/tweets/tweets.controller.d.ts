@@ -6,5 +6,5 @@ export declare class TweetsController {
     constructor(service: TweetsService);
     findManyTweets(): Promise<Tweet[]>;
     create(data: TweetDto): Promise<Tweet>;
-    deleteTweet(id: number): Promise<Tweet>;
+    delete(id: number): Promise<Tweet>;
 }

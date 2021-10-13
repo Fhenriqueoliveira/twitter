@@ -5,13 +5,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FollowsService = void 0;
 const common_1 = require("@nestjs/common");
+const prisma_service_1 = require("../users/prisma.service");
 let FollowsService = class FollowsService {
+    constructor(db) {
+        this.db = db;
+    }
+    async create(data) {
+        return this.db.follow.create({
+            data,
+            include: {
+                User: true,
+            },
+        });
+    }
+    async delete(id) {
+        return this.db.follow.delete({
+            where: { id },
+        });
+    }
 };
 FollowsService = __decorate([
-    (0, common_1.Injectable)()
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], FollowsService);
 exports.FollowsService = FollowsService;
 //# sourceMappingURL=follows.service.js.map

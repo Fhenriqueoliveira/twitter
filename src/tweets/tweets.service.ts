@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
-  Param,
 } from '@nestjs/common';
 import { Tweet, Prisma } from '.prisma/client';
 import { PrismaService } from 'src/users/prisma.service';
@@ -20,14 +19,8 @@ export class TweetsService {
     return this.tw.tweet.findMany();
   }
   async deleteTweet(id: number): Promise<Tweet> {
-    const tweet = await this.tw.tweet.findUnique({
+    return this.tw.tweet.delete({
       where: { id },
     });
-
-    if (!tweet) {
-      throw new NotFoundException();
-    }
-
-    return this.tw.tweet.delete({ where: { id } });
   }
 }

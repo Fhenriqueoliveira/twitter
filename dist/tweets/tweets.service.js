@@ -23,13 +23,9 @@ let TweetsService = class TweetsService {
         return this.tw.tweet.findMany();
     }
     async deleteTweet(id) {
-        const tweet = await this.tw.tweet.findUnique({
+        return this.tw.tweet.delete({
             where: { id },
         });
-        if (!tweet) {
-            throw new common_1.NotFoundException();
-        }
-        return this.tw.tweet.delete({ where: { id } });
     }
 };
 TweetsService = __decorate([

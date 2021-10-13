@@ -10,12 +10,13 @@ exports.FollowsModule = void 0;
 const common_1 = require("@nestjs/common");
 const follows_controller_1 = require("./follows.controller");
 const follows_service_1 = require("./follows.service");
+const prisma_service_1 = require("../users/prisma.service");
 let FollowsModule = class FollowsModule {
 };
 FollowsModule = __decorate([
     (0, common_1.Module)({
         controllers: [follows_controller_1.FollowsController],
-        providers: [follows_service_1.FollowsService],
+        providers: [follows_service_1.FollowsService, prisma_service_1.PrismaService],
     })
 ], FollowsModule);
 exports.FollowsModule = FollowsModule;

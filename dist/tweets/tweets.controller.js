@@ -26,17 +26,19 @@ let TweetsController = class TweetsController {
     create(data) {
         return this.service.create(data);
     }
-    async deleteTweet(id) {
+    async delete(id) {
         return this.service.deleteTweet(id);
     }
 };
 __decorate([
+    (0, common_1.UsePipes)(common_1.ValidationPipe),
     (0, common_1.Get)('/listall'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TweetsController.prototype, "findManyTweets", null);
 __decorate([
+    (0, common_1.UsePipes)(common_1.ValidationPipe),
     (0, common_1.Post)('/createtweet'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -46,11 +48,11 @@ __decorate([
 __decorate([
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     (0, common_1.Delete)('/deletetweet/:id'),
-    __param(0, (0, common_1.Param)('íd', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], TweetsController.prototype, "deleteTweet", null);
+], TweetsController.prototype, "delete", null);
 TweetsController = __decorate([
     (0, common_1.Controller)('tweets'),
     __metadata("design:paramtypes", [tweets_service_1.TweetsService])
